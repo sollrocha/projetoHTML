@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cartas em Leque</title>
+     <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #282c34;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            position: relative;
+            width: 500px;
+            height: 300px;
+        }
+        .card {
+            width: 150px;
+            height: 220px;
+            position: absolute;
+            transform-origin: bottom center;
+            transition: transform 0.5s;
+        }
+        .flipped {
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="game-board"></div>
+    
+
+    <script type="text/javascript">
+       const gameBoard = document.getElementById('game-board'); // Obtém o elemento onde as cartas serão inseridas
+        const cardImages = ['AH', '2H', '3H', '4H', '5H', '6H', '7H']; // Lista de cartas a serem exibidas
+
+        // Percorre cada carta e cria um elemento correspondente
+        cardImages.forEach((card, index) => {
+            const cardElement = document.createElement('img'); // Cria um elemento de imagem para a carta
+            cardElement.classList.add('card'); // Adiciona a classe 'card' para estilização
+            cardElement.src = 'https://deckofcardsapi.com/static/img/back.png'; // Define a imagem inicial como o verso da carta
+            cardElement.dataset.value = card; // Armazena o valor da carta no atributo dataset
+
+             // Calcula o ângulo de rotação para distribuir as cartas em leque
+            const angle = (index - (cardImages.length - 1) / 2) * 15;
+            cardElement.style.transform = `rotate(${angle}deg)`;
+            cardElement.style.left = '50%';
+            cardElement.style.top = '50%';
+            cardElement.style.transform = 'translateX(-50%) rotate(' + angle + 'deg)';
+            cardElement.style.transformOrigin = 'bottom center';
+
+             // Adiciona evento de clique para virar a carta
+            cardElement.addEventListener('click', () => {
+                if (!cardElement.classList.contains('flipped')) {
+                    cardElement.classList.add('flipped'); // Adiciona a classe flipped
+                    cardElement.src = `https://deckofcardsapi.com/static/img/${card}.png`; // Muda para a imagem da carta
+                } else {
+                    cardElement.classList.remove('flipped'); // Remove a classe flipped
+                    cardElement.src = 'https://deckofcardsapi.com/static/img/back.png'; // Volta para o verso da carta
+                }
+            });
+            
+            gameBoard.appendChild(cardElement); // Adiciona a carta ao tabuleiro
+        });
+
+    </script>
+</body></html>
